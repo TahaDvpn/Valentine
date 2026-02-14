@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Be My Valentine 💖</title>
+
+  <!-- Google Font (romantic + modern) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --pink-1:#ffe6ef;
+      --pink-2:#ffd1e2;
+      --pink-3:#ffb3cf;
+      --lav:#e8dbff;
+      --cream:#fff7ee;
+      --red-soft:#ff6b8a;
+      --red:#ff3d6e;
+      --ink:#432c3b;
+      --shadow: 0 18px 50px rgba(67,44,59,.18);
+      --shadow-soft: 0 10px 30px rgba(67,44,59,.12);
+      --glass: rgba(255,255,255,.55);
+      --glass-2: rgba(255,255,255,.72);
+      --ring: rgba(255,61,110,.25);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 800px at 20% 20%, var(--lav), transparent 60%),
+        radial-gradient(1200px 800px at 80% 30%, var(--pink-2), transparent 55%),
+        radial-gradient(1000px 700px at 50% 90%, var(--cream), transparent 60%),
+        linear-gradient(135deg, var(--pink-1), var(--cream));
+      overflow:hidden;
+    }
+
+    /* Subtle grain for elegance */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+      opacity:.35;
+    }
+
+    /* Background floating hearts canvas */
+    #heartsCanvas{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,.08));
+    }
+
+    .wrap{
+      position:relative;
+      z-index:2;
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding:24px;
+    }
+
+    .card{
+      width:min(760px, 92vw);
+      background: linear-gradient(180deg, var(--glass-2), var(--glass));
+      border: 1px solid rgba(255,255,255,.6);
+      border-radius: 28px;
+      padding: clamp(22px, 4vw, 44px);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      position:relative;
+      overflow:hidden;
+      transform: translateZ(0);
+      animation: cardFloat 6.5s ease-in-out infinite;
+    }
+
+    .card::after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 50%),
+                  radial-gradient(circle at 70% 60%, rgba(255,179,207,.45), transparent 55%),
+                  radial-gradient(circle at 40% 80%, rgba(232,219,255,.42), transparent 55%);
+      transform: rotate(18deg);
+      opacity:.85;
+      pointer-events:none;
+    }
+
+    @keyframes cardFloat{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-8px); }
+    }
+
+    .content{
+      position:relative;
+      z-index:1;
+      text-align:center;
+    }
+
+    .title{
+      font-family: "Parisienne", cursive;
+      font-size: clamp(44px, 5.2vw, 78px);
+      font-weight: 400;
+      line-height: 1.05;
+      margin: 0 0 8px;
+      letter-spacing:.2px;
+      color: #3b2232;
+      text-shadow: 0 6px 18px rgba(67,44,59,.15);
+      animation: titleIn 900ms cubic-bezier(.2,.9,.2,1) both;
+    }
+
+    @keyframes titleIn{
+      from{ opacity:0; transform: translateY(12px) scale(.98); filter: blur(4px); }
+      to{ opacity:1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    .subtitle{
+      margin: 10px auto 0;
+      max-width: 46ch;
+      font-size: clamp(14px, 1.7vw, 16px);
+      font-weight: 400;
+      opacity:.78;
+    }
+
+    .buttons{
+      margin-top: 26px;
+      display:flex;
+      gap: 16px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+      position:relative;
+      min-height: 86px;
+    }
+
+    .btn{
+      border:0;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      font-weight: 700;
+      letter-spacing:.3px;
+      padding: 14px 22px;
+      border-radius: 999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      min-width: 160px;
+      box-shadow: var(--shadow-soft);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease, opacity .18s ease;
+      position:relative;
+      outline:none;
+    }
+
+    .btn:focus-visible{
+      box-shadow: 0 0 0 5px var(--ring), var(--shadow-soft);
+    }
+
+    .btn:hover{
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 18px 40px rgba(67,44,59,.18);
+    }
+
+    .btn:active{
+      transform: translateY(0) scale(.99);
+      filter: saturate(1.05);
+    }
+
+    .btn .emoji{
+      font-size: 18px;
+      transform: translateY(1px);
+    }
+
+    .btn-yes{
+      background: linear-gradient(180deg, #ff7a9c, var(--red));
+      color: white;
+      text-shadow: 0 6px 16px rgba(0,0,0,.14);
+      overflow:hidden;
+    }
+
+    /* subtle glowing pulse on YES */
+    .btn-yes::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 45%),
+                  radial-gradient(circle at 70% 60%, rgba(255,255,255,.22), transparent 60%);
+      transform: rotate(12deg);
+      opacity:.9;
+      transition: opacity .25s ease;
+      pointer-events:none;
+      animation: sheen 3.8s ease-in-out infinite;
+    }
+
+    @keyframes sheen{
+      0%,100%{ transform: translateX(-10%) rotate(12deg); opacity:.5; }
+      50%{ transform: translateX(10%) rotate(12deg); opacity:.95; }
+    }
+
+    .btn-no{
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.72));
+      color: #5c3346;
+      border: 1px solid rgba(255,61,110,.18);
+      position:absolute; /* we'll move it around smoothly */
+      left: 50%;
+      top: 0;
+      transform: translateX(calc(-50% + 180px));
+    }
+
+    /* Responsive: stack buttons, and keep NO within bounds */
+    @media (max-width: 520px){
+      .buttons{
+        flex-direction:column;
+        min-height: 150px;
+      }
+      .btn{
+        width: min(320px, 92vw);
+      }
+      .btn-no{
+        position:relative;
+        left:auto;
+        top:auto;
+        transform:none;
+      }
+    }
+
+    /* Small helper text */
+    .hint{
+      margin-top: 18px;
+      font-size: 12px;
+      opacity: .62;
+    }
+
+    /* Overlay (kitty + dramatic text) */
+    .overlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 22px;
+      z-index:10;
+      background: rgba(30,18,26,.28);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      animation: overlayIn .25s ease both;
+    }
+
+    .overlay.show{ display:flex; }
+
+    @keyframes overlayIn{
+      from{ opacity:0; }
+      to{ opacity:1; }
+    }
+
+    .overlay-card{
+      width:min(820px, 94vw);
+      border-radius: 30px;
+      padding: clamp(18px, 3.5vw, 34px);
+      background: linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.62));
+      border: 1px solid rgba(255,255,255,.7);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .overlay-card::after{
+      content:"";
+      position:absolute;
+      inset:-35%;
+      background:
+        radial-gradient(circle at 25% 30%, rgba(255,179,207,.52), transparent 55%),
+        radial-gradient(circle at 75% 65%, rgba(232,219,255,.52), transparent 55%),
+        radial-gradient(circle at 40% 85%, rgba(255,247,238,.62), transparent 55%);
+      transform: rotate(-10deg);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    .overlay-inner{
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items:center;
+      text-align:center;
+    }
+
+    .kitty{
+      width:min(320px, 78vw);
+      height:auto;
+      margin: 0 auto;
+      border-radius: 22px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255,61,110,.14);
+      background: rgba(255,255,255,.55);
+      object-fit:cover;
+    }
+
+    .overlay-text{
+      font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight: 800;
+      font-size: clamp(22px, 3vw, 34px);
+      margin: 0;
+      letter-spacing:.2px;
+      color:#3b2232;
+      text-shadow: 0 10px 22px rgba(67,44,59,.12);
+    }
+
+    .overlay-sub{
+      margin: 0 auto;
+      max-width: 60ch;
+      opacity:.75;
+      font-size: 14px;
+    }
+
+    /* Celebration screen */
+    .celebrate{
+      position:fixed;
+      inset:0;
+      display:none;
+      place-items:center;
+      z-index:20;
+      overflow:hidden;
+      background:
+        radial-gradient(1200px 900px at 50% 20%, rgba(255,255,255,.65), transparent 60%),
+        radial-gradient(1200px 900px at 20% 60%, rgba(232,219,255,.55), transparent 60%),
+        radial-gradient(1200px 900px at 80% 70%, rgba(255,209,226,.65), transparent 60%),
+        linear-gradient(135deg, var(--pink-1), var(--cream));
+      animation: celebrateIn .35s ease both;
+    }
+
+    .celebrate.show{ display:grid; }
+
+    @keyframes celebrateIn{
+      from{ opacity:0; transform: scale(1.01); }
+      to{ opacity:1; transform: scale(1); }
+    }
+
+    .celebrate-message{
+      width:min(860px, 92vw);
+      text-align:center;
+      padding: 28px 22px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.55));
+      border: 1px solid rgba(255,255,255,.7);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      position:relative;
+      overflow:hidden;
+      transform: translateZ(0);
+      animation: pop 700ms cubic-bezier(.2,.9,.2,1) both;
+    }
+
+    @keyframes pop{
+      from{ transform: translateY(12px) scale(.98); opacity:0; filter: blur(3px); }
+      to{ transform: translateY(0) scale(1); opacity:1; filter: blur(0); }
+    }
+
+    .celebrate-message h2{
+      margin: 0 0 8px;
+      font-family:"Parisienne", cursive;
+      font-size: clamp(44px, 5.3vw, 76px);
+      font-weight: 400;
+      color:#3b2232;
+      text-shadow: 0 10px 26px rgba(67,44,59,.14);
+    }
+
+    .celebrate-message p{
+      margin: 0;
+      font-size: clamp(14px, 2vw, 18px);
+      opacity:.78;
+    }
+
+    /* glow aura behind the message */
+    .celebrate-message::before{
+      content:"";
+      position:absolute;
+      inset:-60%;
+      background: radial-gradient(circle at 50% 50%, rgba(255,61,110,.22), transparent 58%);
+      animation: aura 3.5s ease-in-out infinite;
+      pointer-events:none;
+    }
+
+    @keyframes aura{
+      0%,100%{ transform: scale(1); opacity:.55; }
+      50%{ transform: scale(1.08); opacity:.9; }
+    }
+
+    /* Confetti / hearts layer */
+    #celebrateCanvas{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:0;
+      opacity:.95;
+    }
+
+    /* Music toggle */
+    .music-toggle{
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 30;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.7);
+      border: 1px solid rgba(255,255,255,.75);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: 12px;
+      color:#4a2a3b;
+      user-select:none;
+    }
+
+    .switch{
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      background: rgba(255,61,110,.22);
+      position:relative;
+      cursor:pointer;
+      transition: background .2s ease;
+      flex: 0 0 auto;
+      outline:none;
+      border: 1px solid rgba(255,61,110,.18);
+    }
+
+    .knob{
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.92);
+      position:absolute;
+      top: 50%;
+      left: 3px;
+      transform: translateY(-50%);
+      transition: left .2s ease;
+      box-shadow: 0 10px 20px rgba(67,44,59,.15);
+    }
+
+    .switch.on{
+      background: rgba(255,61,110,.42);
+    }
+    .switch.on .knob{
+      left: 22px;
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition: none !important; scroll-behavior:auto !important; }
+      #heartsCanvas, #celebrateCanvas{ display:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Floating hearts background -->
+  <canvas id="heartsCanvas" aria-hidden="true"></canvas>
+
+  <main class="wrap">
+    <section class="card" aria-label="Valentine card">
+      <div class="content">
+        <h1 class="title">Will you be my Valentine Sarina?</h1>
+        <p class="subtitle">I promise endless cozy moments, sweet smiles, and all the heart-eyes. 💞</p>
+
+        <div class="buttons" id="buttonsArea">
+          <button class="btn btn-yes" id="yesBtn" type="button" aria-label="Yes">
+            <span class="emoji">💘</span> YES
+          </button>
+
+          <button class="btn btn-no" id="noBtn" type="button" aria-label="No">
+            <span class="emoji">💔</span> NO
+          </button>
+        </div>
+
+        <div class="hint" id="hint">Tip: Try saying “NO”… if you dare bache joon😇</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Kitty overlay after NO attempts -->
+  <div class="overlay" id="kittyOverlay" role="dialog" aria-modal="true" aria-label="Kitty warning overlay">
+    <div class="overlay-card">
+      <div class="overlay-inner">
+        <!-- Replace the src URL easily with your own image -->
+        <img
+          class="kitty"
+          id="kittyImg"
+          alt="A cute cartoon kitty holding a tiny toy water gun"
+          src="kitty.png"
+        />
+        <p class="overlay-text">Don’t mess with me 😼</p>
+        <p class="overlay-sub">Okay okay… Mibinam ke Sakht dar Talashi. Pas Faghat ye Gozine Mimone Khanome😏.</p>
+        <div style="display:flex; justify-content:center;">
+          <button class="btn btn-yes" id="yesBtnOverlay" type="button" aria-label="Yes (overlay)">
+            <span class="emoji">💘</span> YES
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebration screen -->
+  <div class="celebrate" id="celebrateScreen" aria-label="Celebration screen">
+    <canvas id="celebrateCanvas" aria-hidden="true"></canvas>
+    <div class="celebrate-message" role="status" aria-live="polite">
+      <h2>Yay!</h2>
+      <p>You just made me the happiest person alive ❤️</p>
+    </div>
+  </div>
+
+  <!-- Optional soft background music (muted by default) -->
+  <div class="music-toggle" id="musicToggle" aria-label="Background music toggle">
+    <span>Music</span>
+    <div class="switch" id="musicSwitch" role="switch" aria-checked="false" tabindex="0">
+      <div class="knob"></div>
+    </div>
+    <span style="opacity:.7;">(soft)</span>
+  </div>
+
+  <audio id="bgm" preload="auto" loop muted>
+    <!-- Replace with any romantic royalty-free audio URL you prefer -->
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2a95b6a3b7.mp3?filename=romantic-piano-112191.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    /**
+     * Production-ready, single-file Valentine site.
+     * - Floating hearts background (canvas)
+     * - NO button dodges cursor, counts attempts, grows YES a bit
+     * - After 3–5 attempts, NO disappears and kitty overlay appears
+     * - YES triggers celebration screen with heart-confetti (canvas)
+     * - Optional background music (muted by default, toggle to play)
+     */
+
+    // ---------- Utilities ----------
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+    const rand = (min, max) => Math.random() * (max - min) + min;
+    const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    // ---------- Elements ----------
+    const buttonsArea = document.getElementById("buttonsArea");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const hint = document.getElementById("hint");
+
+    const kittyOverlay = document.getElementById("kittyOverlay");
+    const yesBtnOverlay = document.getElementById("yesBtnOverlay");
+
+    const celebrateScreen = document.getElementById("celebrateScreen");
+    const celebrateCanvas = document.getElementById("celebrateCanvas");
+
+    const bgm = document.getElementById("bgm");
+    const musicSwitch = document.getElementById("musicSwitch");
+    const musicToggle = document.getElementById("musicToggle");
+
+    // ---------- NO button behavior ----------
+    let noAttempts = 0;
+    let threshold = Math.floor(rand(2, 3));
+    let noHidden = false;
+    let yesScale = 1;
+
+    // Smooth movement config
+    noBtn.style.transition = "transform .18s ease, left .35s cubic-bezier(.2,.9,.2,1), top .35s cubic-bezier(.2,.9,.2,1), opacity .2s ease";
+
+    // For desktop: NO is absolutely positioned inside .buttons
+    // For small screens, NO becomes relative and doesn't dodge (still counts clicks if possible).
+    const isMobileLayout = () => window.matchMedia("(max-width: 520px)").matches;
+
+    function ensureNoButtonAbsolute(){
+      if (isMobileLayout()){
+        // On mobile layout, NO is relative; avoid moving it off-screen.
+        noBtn.style.position = "relative";
+        noBtn.style.left = "auto";
+        noBtn.style.top = "auto";
+        noBtn.style.transform = "none";
+      } else {
+        noBtn.style.position = "absolute";
+      }
+    }
+    ensureNoButtonAbsolute();
+    window.addEventListener("resize", ensureNoButtonAbsolute, { passive: true });
+
+    function moveNoButtonAway(pointerX, pointerY){
+      if (noHidden || isMobileLayout()) return;
+
+      const areaRect = buttonsArea.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      // Bounds inside buttons area
+      const padding = 10;
+      const minX = areaRect.left + padding;
+      const maxX = areaRect.right - btnRect.width - padding;
+      const minY = areaRect.top + padding;
+      const maxY = areaRect.bottom - btnRect.height - padding;
+
+      // If area too small, bail safely.
+      if (maxX <= minX || maxY <= minY) return;
+
+      // Prefer a location far from pointer (playful dodge)
+      let best = null;
+      for (let i = 0; i < 8; i++){
+        const x = rand(minX, maxX);
+        const y = rand(minY, maxY);
+        const dx = x - pointerX;
+        const dy = y - pointerY;
+        const dist = Math.hypot(dx, dy);
+
+        if (!best || dist > best.dist){
+          best = { x, y, dist };
+        }
+      }
+
+      // Convert to buttonsArea-local coordinates
+      const localLeft = best.x - areaRect.left;
+      const localTop  = best.y - areaRect.top;
+
+      noBtn.style.left = localLeft + "px";
+      noBtn.style.top  = localTop + "px";
+    }
+
+    function bumpYesButton(){
+      yesScale = clamp(yesScale + 0.06, 1, 1.4);
+      yesBtn.style.transform = `translateY(-2px) scale(${yesScale})`;
+      // After a short delay, allow hover to feel natural again:
+      window.setTimeout(() => {
+        yesBtn.style.transform = "";
+      }, 250);
+    }
+
+    function hideNoAndShowKitty(){
+      if (noHidden) return;
+      noHidden = true;
+
+      noBtn.style.opacity = "0";
+      noBtn.style.pointerEvents = "none";
+      hint.textContent = "Wise choice. 😼";
+
+      window.setTimeout(() => {
+        noBtn.style.display = "none";
+        kittyOverlay.classList.add("show");
+        // Only YES remains visible in overlay
+        yesBtnOverlay.focus({ preventScroll: true });
+      }, 220);
+    }
+
+    // Cursor-proximity detection (desktop)
+    window.addEventListener("pointermove", (e) => {
+      if (noHidden || isMobileLayout()) return;
+
+      const btnRect = noBtn.getBoundingClientRect();
+      const cx = btnRect.left + btnRect.width / 2;
+      const cy = btnRect.top + btnRect.height / 2;
+
+      const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+      const trigger = Math.max(80, Math.min(140, btnRect.width * 0.9));
+
+      if (dist < trigger){
+        moveNoButtonAway(e.clientX, e.clientY);
+      }
+    }, { passive:true });
+
+    // Count attempts when user tries to click NO
+    noBtn.addEventListener("pointerdown", (e) => {
+      if (noHidden) return;
+      noAttempts++;
+
+      bumpYesButton();
+      hint.textContent = `Attempt ${noAttempts}… you’re really trying, huh? Che jora'ti!!!! 😅`;
+
+      // Immediately dodge on click attempt
+      moveNoButtonAway(e.clientX, e.clientY);
+
+      if (noAttempts >= threshold){
+        hideNoAndShowKitty();
+      }
+    });
+
+    // Also dodge when NO receives focus via keyboard (accessibility)
+    noBtn.addEventListener("focus", () => {
+      if (noHidden || isMobileLayout()) return;
+      // Move to a random spot within bounds (no pointer info)
+      const areaRect = buttonsArea.getBoundingClientRect();
+      moveNoButtonAway(areaRect.left + rand(0, areaRect.width), areaRect.top + rand(0, areaRect.height));
+    });
+
+    // ---------- YES behavior (main + overlay) ----------
+    function onYes(){
+      // Close kitty overlay if open
+      kittyOverlay.classList.remove("show");
+      // Show celebration
+      celebrateScreen.classList.add("show");
+      startCelebrate();
+      // Subtle haptics on supported devices
+      if (navigator.vibrate) navigator.vibrate([40, 30, 40]);
+    }
+
+    yesBtn.addEventListener("click", onYes);
+    yesBtnOverlay.addEventListener("click", onYes);
+
+    // Prevent overlay click-through
+    kittyOverlay.addEventListener("click", (e) => {
+      if (e.target === kittyOverlay) {
+        // little bounce feedback
+        const card = kittyOverlay.querySelector(".overlay-card");
+        card.animate([
+          { transform: "scale(1)" },
+          { transform: "scale(1.015)" },
+          { transform: "scale(1)" }
+        ], { duration: 280, easing: "cubic-bezier(.2,.9,.2,1)" });
+      }
+    });
+
+    // ---------- Floating hearts background (canvas) ----------
+    const heartsCanvas = document.getElementById("heartsCanvas");
+    const hctx = heartsCanvas.getContext("2d", { alpha: true });
+
+    let hearts = [];
+    let hW = 0, hH = 0;
+
+    function resizeHearts(){
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      hW = heartsCanvas.width = Math.floor(window.innerWidth * dpr);
+      hH = heartsCanvas.height = Math.floor(window.innerHeight * dpr);
+      heartsCanvas.style.width = window.innerWidth + "px";
+      heartsCanvas.style.height = window.innerHeight + "px";
+      hctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function heartPath(ctx, x, y, s){
+      // Simple heart shape using bezier curves
+      ctx.beginPath();
+      const topCurveHeight = s * 0.3;
+      ctx.moveTo(x, y + topCurveHeight);
+      ctx.bezierCurveTo(x, y, x - s, y, x - s, y + topCurveHeight);
+      ctx.bezierCurveTo(x - s, y + (s + topCurveHeight), x, y + (s + topCurveHeight), x, y + s * 1.6);
+      ctx.bezierCurveTo(x, y + (s + topCurveHeight), x + s, y + (s + topCurveHeight), x + s, y + topCurveHeight);
+      ctx.bezierCurveTo(x + s, y, x, y, x, y + topCurveHeight);
+      ctx.closePath();
+    }
+
+    function makeHeart(){
+      const size = rand(6, 18);
+      return {
+        x: rand(0, window.innerWidth),
+        y: window.innerHeight + rand(0, window.innerHeight * 0.3),
+        size,
+        vy: rand(0.35, 1.05),
+        vx: rand(-0.25, 0.25),
+        drift: rand(-0.4, 0.4),
+        rot: rand(-0.6, 0.6),
+        vr: rand(-0.004, 0.004),
+        alpha: rand(0.12, 0.32),
+        hue: pick([345, 350, 330, 315, 10]), // romantic pinks / blush
+      };
+    }
+
+    function initHearts(){
+      hearts = [];
+      const count = Math.floor(clamp(window.innerWidth / 18, 22, 70));
+      for (let i = 0; i < count; i++){
+        const h = makeHeart();
+        h.y = rand(0, window.innerHeight);
+        hearts.push(h);
+      }
+    }
+
+    function drawHearts(){
+      hctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      for (const h of hearts){
+        h.y -= h.vy;
+        h.x += h.vx + Math.sin((h.y * 0.01)) * h.drift;
+        h.rot += h.vr;
+
+        // reset when off top
+        if (h.y < -60){
+          Object.assign(h, makeHeart());
+        }
+
+        hctx.save();
+        hctx.globalAlpha = h.alpha;
+        hctx.translate(h.x, h.y);
+        hctx.rotate(h.rot);
+        hctx.fillStyle = `hsla(${h.hue}, 85%, 70%, 1)`;
+        heartPath(hctx, 0, 0, h.size);
+        hctx.fill();
+        hctx.restore();
+      }
+
+      requestAnimationFrame(drawHearts);
+    }
+
+    // ---------- Celebration hearts/confetti (canvas) ----------
+    const cctx = celebrateCanvas.getContext("2d", { alpha: true });
+    let confetti = [];
+    let cW = 0, cH = 0;
+    let celebrateRunning = false;
+
+    function resizeCelebrate(){
+      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      cW = celebrateCanvas.width = Math.floor(window.innerWidth * dpr);
+      cH = celebrateCanvas.height = Math.floor(window.innerHeight * dpr);
+      celebrateCanvas.style.width = window.innerWidth + "px";
+      celebrateCanvas.style.height = window.innerHeight + "px";
+      cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function makeParticle(){
+      const kind = Math.random() < 0.65 ? "heart" : "confetti";
+      const size = kind === "heart" ? rand(8, 18) : rand(6, 12);
+      return {
+        kind,
+        x: rand(0, window.innerWidth),
+        y: -30,
+        vx: rand(-1.2, 1.2),
+        vy: rand(1.8, 3.4),
+        g: rand(0.02, 0.06),
+        size,
+        rot: rand(-1.2, 1.2),
+        vr: rand(-0.08, 0.08),
+        alpha: rand(0.55, 0.95),
+        hue: pick([345, 350, 330, 315, 10, 25]),
+        life: rand(180, 300)
+      };
+    }
+
+    function spawnBurst(n = 90){
+      for (let i = 0; i < n; i++) confetti.push(makeParticle());
+    }
+
+    function drawCelebrate(){
+      if (!celebrateRunning) return;
+
+      cctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      // spawn continuously, but gently
+      if (confetti.length < 240 && Math.random() < 0.55){
+        confetti.push(makeParticle());
+      }
+
+      for (let i = confetti.length - 1; i >= 0; i--){
+        const p = confetti[i];
+        p.vy += p.g;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        p.life -= 1;
+
+        // wrap sideways
+        if (p.x < -40) p.x = window.innerWidth + 40;
+        if (p.x > window.innerWidth + 40) p.x = -40;
+
+        // fade near end of life
+        const fade = p.life < 40 ? (p.life / 40) : 1;
+
+        cctx.save();
+        cctx.globalAlpha = p.alpha * fade;
+        cctx.translate(p.x, p.y);
+        cctx.rotate(p.rot);
+
+        if (p.kind === "heart"){
+          cctx.fillStyle = `hsla(${p.hue}, 90%, 68%, 1)`;
+          heartPath(cctx, 0, 0, p.size);
+          cctx.fill();
+        } else {
+          cctx.fillStyle = `hsla(${p.hue}, 95%, 72%, 1)`;
+          cctx.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.65);
+        }
+
+        cctx.restore();
+
+        if (p.y > window.innerHeight + 60 || p.life <= 0){
+          confetti.splice(i, 1);
+        }
+      }
+
+      requestAnimationFrame(drawCelebrate);
+    }
+
+    function startCelebrate(){
+      resizeCelebrate();
+      confetti = [];
+      spawnBurst(130);
+      celebrateRunning = true;
+      requestAnimationFrame(drawCelebrate);
+    }
+
+    // ---------- Optional background music (muted by default) ----------
+    // Browsers require user interaction to start audio. We'll toggle on demand.
+    function setMusic(on){
+      musicSwitch.classList.toggle("on", on);
+      musicSwitch.setAttribute("aria-checked", on ? "true" : "false");
+
+      if (on){
+        bgm.muted = false;
+        // try play; if blocked, re-mute and revert switch
+        bgm.play().catch(() => {
+          bgm.muted = true;
+          musicSwitch.classList.remove("on");
+          musicSwitch.setAttribute("aria-checked", "false");
+        });
+      } else {
+        bgm.pause();
+        bgm.currentTime = 0;
+        bgm.muted = true;
+      }
+    }
+
+    function toggleMusic(){
+      const on = !musicSwitch.classList.contains("on");
+      setMusic(on);
+      if (navigator.vibrate) navigator.vibrate(18);
+    }
+
+    musicSwitch.addEventListener("click", toggleMusic);
+    musicSwitch.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " "){
+        e.preventDefault();
+        toggleMusic();
+      }
+    });
+    // Also allow clicking the whole pill
+    musicToggle.addEventListener("click", (e) => {
+      if (e.target === musicSwitch || musicSwitch.contains(e.target)) return;
+      toggleMusic();
+    });
+
+    // ---------- Init ----------
+    function init(){
+      resizeHearts();
+      initHearts();
+      drawHearts();
+      resizeCelebrate();
+
+      // Ensure NO starts within bounds (desktop)
+      if (!isMobileLayout()){
+        // Place NO a bit to the right initially
+        const areaRect = buttonsArea.getBoundingClientRect();
+        const btnRect = noBtn.getBoundingClientRect();
+        const left = clamp(areaRect.width * 0.62, 10, Math.max(10, areaRect.width - btnRect.width - 10));
+        const top = clamp(0, 0, Math.max(0, areaRect.height - btnRect.height));
+        noBtn.style.left = left + "px";
+        noBtn.style.top = top + "px";
+      }
+    }
+
+    window.addEventListener("resize", () => {
+      resizeHearts();
+      resizeCelebrate();
+      // Keep NO within bounds if visible
+      if (!noHidden && !isMobileLayout()){
+        const areaRect = buttonsArea.getBoundingClientRect();
+        const btnRect = noBtn.getBoundingClientRect();
+        const currentLeft = parseFloat(noBtn.style.left || "0");
+        const currentTop  = parseFloat(noBtn.style.top || "0");
+        const clampedLeft = clamp(currentLeft, 10, Math.max(10, areaRect.width - btnRect.width - 10));
+        const clampedTop  = clamp(currentTop, 10, Math.max(10, areaRect.height - btnRect.height - 10));
+        noBtn.style.left = clampedLeft + "px";
+        noBtn.style.top  = clampedTop + "px";
+      }
+    }, { passive:true });
+
+    // Allow ESC to close overlay (but keep NO gone)
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape"){
+        if (kittyOverlay.classList.contains("show")){
+          kittyOverlay.classList.remove("show");
+          // Keep user focused to YES
+          yesBtn.focus({ preventScroll: true });
+        }
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
